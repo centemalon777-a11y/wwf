@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SATPrep | Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a192f, #020c1b);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .profile-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 40px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 25px rgba(66, 165, 245, 0.3);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 1.2s ease;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid #42a5f5;
+    }
+
+    .upload-btn {
+      background: #42a5f5;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      background: #2196f3;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #42a5f5;
+    }
+
+    p {
+      color: #ccc;
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+    }
+
+    .quote {
+      font-style: italic;
+      color: #b3e5fc;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      transition: opacity 0.5s ease;
+    }
+
+    .logout-btn {
+      background: transparent;
+      border: 2px solid #42a5f5;
+      color: #42a5f5;
+      padding: 8px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 25px;
+      transition: 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #42a5f5;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .profile-container {
+        padding: 30px 20px;
+      }
+      .avatar {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-container">
+    <img src="https://via.placeholder.com/120" alt="User Avatar" class="avatar" id="avatar">
+    <br>
+    <input type="file" id="upload" accept="image/*" style="display:none;">
+    <button class="upload-btn" id="uploadBtn">Upload Image</button>
+
+    <h2 id="userName">John Doe</h2>
+    <p id="userEmail">john@example.com</p>
+    <div class="quote" id="motivationalQuote">Loading inspiration...</div>
+
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+
+  <script>
+    // Redirect if not logged in
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "https://centemalon777-a11y.github.io/pn/";
+    }
+
+    // Load stored name/email
+    document.getElementById("userName").textContent = localStorage.getItem("userName") || "John Doe";
+    document.getElementById("userEmail").textContent = localStorage.getItem("userEmail") || "john@example.com";
+
+    // Load avatar if stored
+    const savedAvatar = localStorage.getItem("userAvatar");
+    if (savedAvatar) {
+      document.getElementById("avatar").src = savedAvatar;
+    }
+
+    // Upload button triggers file input
+    document.getElementById("uploadBtn").addEventListener("click", () => {
+      document.getElementById("upload").click();
+    });
+
+    // Handle file upload and preview
+    document.getElementById("upload").addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imgData = e.target.result;
+          document.getElementById("avatar").src = imgData;
+          localStorage.setItem("userAvatar", imgData);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Motivational quotes
+    const quotes = [
+      "“Success is the sum of small efforts repeated day in and day out.”",
+      "“Believe you can and you’re halfway there.”",
+      "“The future belongs to those who prepare for it today.”",
+      "“Discipline is choosing what you want most over what you want now.”",
+      "“Push yourself, because no one else is going to do it for you.”",
+      "“Don’t limit your challenges — challenge your limits.”",
+      "“It always seems impossible until it’s done.”"
+    ];
+
+    function showRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      const quoteEl = document.getElementById("motivationalQuote");
+      quoteEl.style.opacity = 0;
+      setTimeout(() => {
+        quoteEl.textContent = quotes[randomIndex];
+        quoteEl.style.opacity = 1;
+      }, 300);
+    }
+
+    showRandomQuote();
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "https://centemalon777-a11y.github.io/pn/";
+    });
+  </script>
+
+</body>
+</html>
